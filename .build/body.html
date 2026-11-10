@@ -1,0 +1,287 @@
+<div class="app" id="app">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="min-w-0">
+        <div class="brand-title">Colortrend</div>
+        <div class="brand-sub">Ambiance <em>Wall Simulator</em></div>
+      </div>
+    </div>
+
+    <!-- Active paint indicator -->
+    <div class="active-pill" title="Active paint">
+      <span class="swatch" id="topSwatch" style="background:#D8D0C4"></span>
+      <div class="min-w-0">
+        <div class="ap-name" id="topName">Linen Whisper</div>
+        <div class="ap-code" id="topCode">1124W · NEUTRAL</div>
+      </div>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="flex items-center gap-2 flex-wrap">
+      <button class="btn" id="compareBtn" aria-pressed="false" title="Toggle original view (hold O)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v18"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
+        <span id="compareLabel">Compare Original</span>
+      </button>
+      <button class="btn" id="uploadBtn" title="Upload your own room photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Upload Room
+      </button>
+      <button class="btn btn-danger" id="resetBtn" title="Reset all parameters, masks and colours">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        Reset
+      </button>
+      <input type="file" id="fileInput" accept="image/*" class="hidden" />
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside class="side" id="sidebar">
+
+      <!-- Active colour hero -->
+      <section class="card">
+        <div class="card-h">
+          <div class="card-t">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 0 18h1.5a2.5 2.5 0 0 0 0-5H13a2 2 0 0 1 0-4h5a3 3 0 0 0 3-3 9 9 0 0 0-9-6Z"/><circle cx="7.5" cy="11" r="1.1" fill="currentColor" stroke="none"/><circle cx="10" cy="7" r="1.1" fill="currentColor" stroke="none"/></svg>
+            Active Paint
+          </div>
+          <span class="card-badge" id="coverageBadge">0.0% wall</span>
+        </div>
+        <div class="colour-hero">
+          <div class="big-sw" id="heroSwatch" style="background:#D8D0C4"></div>
+          <div class="colour-meta">
+            <div class="colour-name" id="heroName">Linen Whisper</div>
+            <div class="colour-code" id="heroCode">1124W</div>
+            <div class="colour-hex" id="heroHex">#D8D0C4 · NEUTRAL</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Palette -->
+      <section class="card">
+        <div class="card-h">
+          <div class="card-t">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>
+            Ambiance Library
+          </div>
+          <span class="card-badge" id="paletteCount">0</span>
+        </div>
+
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="input" id="searchInput" type="search" autocomplete="off" spellcheck="false"
+                 placeholder="Search name or code — e.g. Lavender, 6151P" aria-label="Search colours by name or code" />
+          <button class="search-clear" id="searchClear" aria-label="Clear search" tabindex="-1">×</button>
+        </div>
+
+        <div class="tabs" id="tabs" role="tablist" aria-label="Colour categories">
+          <button class="tab" role="tab" data-cat="all" aria-selected="true">All</button>
+          <button class="tab" role="tab" data-cat="neutral" aria-selected="false">Neutrals</button>
+          <button class="tab" role="tab" data-cat="warm" aria-selected="false">Warms</button>
+          <button class="tab" role="tab" data-cat="cool" aria-selected="false">Cools</button>
+          <button class="tab" role="tab" data-cat="deep" aria-selected="false">Deep</button>
+        </div>
+
+        <div class="palette-scroll">
+          <div class="pgrid" id="paletteGrid" role="group" aria-label="Colour palette"></div>
+          <div class="empty-note hidden" id="paletteEmpty">No shades match that search.</div>
+        </div>
+      </section>
+
+      <!-- Paint regions -->
+      <section class="card">
+        <div class="card-h">
+          <div class="card-t">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2.5a2.5 2.5 0 0 0 0 5V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4.5a2.5 2.5 0 0 0 0-5Z"/><path d="M14 4v16" stroke-dasharray="2.6 2.6"/></svg>
+            Wall Regions
+          </div>
+          <span class="card-badge" id="regionCount">0</span>
+        </div>
+
+        <div class="seg" id="paintMode" role="group" aria-label="What to paint">
+          <button data-mode="all" aria-pressed="true">All walls</button>
+          <button data-mode="isolate" aria-pressed="false">This region</button>
+          <button data-mode="new" aria-pressed="false">New seed</button>
+        </div>
+        <div class="field-hint" id="modeHint">Click the photo to add wall regions. Every detected wall gets the active paint.</div>
+
+        <div class="region-list mt-3" id="regionList"></div>
+
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-block" id="sampleWallsBtn">Auto-detect walls</button>
+          <button class="btn" id="clearRegionsBtn" title="Remove all regions">Clear</button>
+        </div>
+      </section>
+
+      <!-- Segmentation tuning -->
+      <section class="card">
+        <div class="card-h">
+          <div class="card-t">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 20V10M12 20V4M20 20v-6"/></svg>
+            Mask Tuning
+          </div>
+          <span class="card-badge" id="regionToleranceBadge">ΔE</span>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-lab">Color Tolerance (ΔE)</span>
+            <span class="field-val" id="tolVal">22</span>
+          </div>
+          <input type="range" id="tolRange" min="4" max="45" step="1" value="22" aria-label="Color tolerance delta E" />
+          <div class="field-hint">CIE76 perceptual distance from the seed colour. Higher picks up more shading variation.</div>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-lab">Edge Guard (Sobel)</span>
+            <span class="field-val" id="edgeVal">0.55</span>
+          </div>
+          <input type="range" id="edgeRange" min="0" max="1" step="0.01" value="0.55" aria-label="Sobel edge guard strength" />
+          <div class="field-hint">Stops paint bleeding across frames, furniture and lamp edges.</div>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-lab">Lighting Preservation</span>
+            <span class="field-val" id="lightVal">100%</span>
+          </div>
+          <input type="range" id="lightRange" min="0" max="100" step="1" value="100" aria-label="Lighting preservation" />
+          <div class="field-hint">100% keeps every highlight and shadow; 0% flattens to a solid swatch.</div>
+        </div>
+      </section>
+
+      <!-- Wall limits -->
+      <section class="card">
+        <div class="card-h">
+          <div class="card-t">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M9 4v16"/></svg>
+            Wall Boundaries
+          </div>
+          <span class="card-badge" id="spanBadge">0–100%</span>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-lab">Max Height Cutoff</span>
+            <span class="field-val" id="heightVal">100%</span>
+          </div>
+          <input type="range" id="heightRange" min="5" max="100" step="1" value="100" aria-label="Maximum paint height percentage" />
+          <div class="field-hint">Lower it for half-walls or wainscoting.</div>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-lab">Horizontal Length Span</span>
+            <span class="field-val" id="spanVal">0% – 100%</span>
+          </div>
+          <div class="dual">
+            <div class="dual-track"><div class="dual-fill" id="spanFill" style="left:0;width:100%"></div></div>
+            <input type="range" id="spanMinRange" min="0" max="100" step="1" value="0" aria-label="Horizontal span start" />
+            <input type="range" id="spanMaxRange" min="0" max="100" step="1" value="100" aria-label="Horizontal span end" />
+          </div>
+          <div class="field-hint">Constrain the paint to a single accent wall.</div>
+        </div>
+      </section>
+
+      <!-- Render options -->
+      <section class="card">
+        <div class="card-h">
+          <div class="card-t">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></svg>
+            Render Options
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <label for="maskToggle">Show region overlay</label>
+          <button class="switch" id="maskToggle" role="switch" aria-checked="false" aria-label="Show region overlay"></button>
+        </div>
+        <div class="switch-row">
+          <label for="seedToggle">Show seed points</label>
+          <button class="switch" id="seedToggle" role="switch" aria-checked="true" aria-label="Show seed points"></button>
+        </div>
+        <div class="switch-row">
+          <label for="sheenToggle">Wall sheen / texture</label>
+          <button class="switch" id="sheenToggle" role="switch" aria-checked="true" aria-label="Wall sheen and texture"></button>
+        </div>
+
+        <div class="field mt-3">
+          <div class="field-top">
+            <span class="field-lab">Mask Feathering</span>
+            <span class="field-val" id="featherVal">1.5px</span>
+          </div>
+          <input type="range" id="featherRange" min="0" max="6" step="0.5" value="1.5" aria-label="Mask feather radius" />
+        </div>
+      </section>
+
+      <p class="text-xs" style="color:#5b6779;line-height:1.6;padding:2px 4px 0">
+        Segmentation runs in CIELAB with a 3×3 Sobel edge guard, a local-texture cue and a BFS
+        flood fill. The paint is multiplied into the photo's own luminance, so the room's
+        lighting, shadows and texture stay exactly as photographed.
+      </p>
+    </aside>
+
+    <!-- ===================== STAGE ===================== -->
+    <main class="stage">
+      <div class="stage-bar">
+        <div class="stage-title">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="stageTitle">Bedroom · natural daylight</span>
+        </div>
+        <div class="stage-stat" id="stageStat">Segmenting…</div>
+      </div>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <div class="canvas-holder" id="canvasHolder">
+          <canvas id="scene" width="1536" height="1024" role="img"
+                  aria-label="Interactive room preview. Click a wall to define a paint region."></canvas>
+          <canvas id="marks" width="1536" height="1024" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="hint" id="hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 3 7.5 18 2.6-7.4 7.4-2.6L4 3Z"/></svg>
+          Click any wall to seed a region · <kbd>O</kbd> to compare · <kbd>R</kbd> to reset
+        </div>
+
+        <div class="busy" id="busy"><div class="spinner" aria-hidden="true"></div></div>
+      </div>
+
+      <div class="legend">
+        <span><b>Seed</b> click to flood-fill a wall</span>
+        <span class="k">ΔE CIE76</span>
+        <span class="k">Sobel 3×3</span>
+        <span class="k">BFS</span>
+        <span id="perfLegend" class="ml-auto"></span>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== ERROR MODAL ===================== -->
+<div class="overlay" id="errorOverlay" role="dialog" aria-modal="true" aria-labelledby="errTitle">
+  <div class="modal">
+    <div class="modal-top">
+      <div class="modal-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 8v5"/><circle cx="12" cy="16.5" r=".9" fill="currentColor" stroke="none"/><path d="M10.3 3.2 1.9 17.6A2 2 0 0 0 3.6 20.6h16.8a2 2 0 0 0 1.7-3L13.7 3.2a2 2 0 0 0-3.4 0Z"/></svg>
+      </div>
+      <div class="min-w-0">
+        <h3 id="errTitle">Something went wrong</h3>
+        <div class="ctx" id="errCtx">renderer</div>
+      </div>
+    </div>
+    <div class="msg" id="errMsg"></div>
+    <div class="modal-actions">
+      <button class="btn" id="errDismiss">Dismiss</button>
+      <button class="btn btn-accent" id="errReset">Reset simulator</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sr-only" aria-live="polite" id="liveRegion"></div>

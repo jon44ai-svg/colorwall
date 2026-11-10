@@ -1,0 +1,8 @@
+# dependencies
+node_modules/
+
+# generated previews / scratch output from the verification tools
+tools/out/
+*.ppm
+
+# build inputs are committed (they are the source of index.html); no ignores needed

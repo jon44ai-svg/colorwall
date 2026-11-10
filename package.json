@@ -1,0 +1,31 @@
+{
+  "name": "colortrend-ambiance-wall-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Single-file HTML5 Canvas virtual wall-painting studio using the Colortrend Ambiance palette, CIELAB/Cie76 segmentation, Sobel edge guarding and BFS flood fill.",
+  "type": "module",
+  "scripts": {
+    "build": "python3 scripts/build.py",
+    "dev": "python3 scripts/build.py && npx --yes http-server . -p 4173 -a 0.0.0.0 -c-1",
+    "test": "npm run build && node tools/core.test.mjs && node tools/ui.test.mjs && node tools/pipeline.mjs --scale 0.75",
+    "test:core": "node tools/core.test.mjs",
+    "test:ui": "node tools/ui.test.mjs",
+    "test:pipeline": "node tools/pipeline.mjs --scale 0.75",
+    "preview:render": "node tools/pipeline.mjs --scale 0.75 --code 6151P"
+  },
+  "keywords": [
+    "canvas",
+    "cielab",
+    "paint",
+    "interior-design",
+    "colortrend",
+    "image-segmentation"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "jpeg-js": "^0.4.4",
+    "jsdom": "^31.0.0",
+    "parse5": "^8.1.1",
+    "pngjs": "^7.0.0"
+  }
+}
